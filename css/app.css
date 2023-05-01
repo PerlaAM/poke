@@ -67,6 +67,21 @@ body {
   align-items: center;
 }
 
+button {
+  padding: 1rem;
+  background-color: #51d4d9;
+  outline: none;
+  border: none;
+  margin-top: 1rem;
+  width: 8rem;
+  border-radius: 13px;
+  color: white;
+}
+
+button:hover {
+  background-color: #002856;
+}
+
 .text-box {
   height: calc(100% - 67px);
   width: 60%;
@@ -191,9 +206,12 @@ body {
 
 .small-card-img-box {
   margin-right: 1rem;
+  align-items: center;
+  display: flex;
 }
 
 .small-card-img-box img {
+  height: 5rem;
   width: 5rem;
 }
 
@@ -281,8 +299,3 @@ body {
     height: 5rem;
   }
 }
-
-/* @media screen and (min-width: 1024px) {
-  .content-cards {
-  }
-} */
