@@ -139,7 +139,7 @@ body {
 }
 
 .content-cards {
-  width: 100%;
+  width: auto;
 }
 
 .card-img-box {
@@ -244,6 +244,7 @@ body {
     padding: 0 2rem;
     flex-direction: column;
     align-items: inherit;
+    background-color: blue;
   }
 
   .text-box {
@@ -280,3 +281,8 @@ body {
     height: 5rem;
   }
 }
+
+/* @media screen and (min-width: 1024px) {
+  .content-cards {
+  }
+} */
