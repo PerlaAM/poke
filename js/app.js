@@ -61,7 +61,7 @@ const getEvolutionData = async (evolution, currentId, pokemon) => {
                 name: secondSpecieName,
             }]
 
-            if (currentId != firstSpecieId && currentId != secondSpecieId) {
+            if (currentId != firstSpecieId && currentId != secondSpecieId && pokemon.name != firstSpecieName) {
                 newEvolution = [
                     {
                         id: currentId,
@@ -205,6 +205,7 @@ const fetchReset = (id) => {
 
 const doSearch = () => {
     const searchInput = document.getElementById("search-input").value;
+    document.getElementById('evolution').innerHTML = "";
     fetchData(searchInput);
 }
 
