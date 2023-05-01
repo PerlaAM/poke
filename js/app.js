@@ -19,16 +19,19 @@ const randomPoke = randomPokemon(1, 151);
 
 const fetchData = async (id) => {
     try {
-        let [pokeData, pokeSpecie] = await Promise.all([
+        let [pokeData, pokeSpecie, pokeList] = await Promise.all([
             fetch(`https://pokeapi.co/api/v2/pokemon/${id}`),
-            fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`)
+            fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`),
+            fetch(`https://pokeapi.co/api/v2/pokemon/?limit=9&offset=${randomPoke}`)
         ]);
         const data = await pokeData.json();
         const specie = await pokeSpecie.json();
+        const list = await pokeList.json();
 
         getEvolutionData(specie, id, data);
-
+        getExplorerData(list);
         fillSectionHome(data, specie);
+
     }
     catch (error) {
         console.log(error);
@@ -48,7 +51,6 @@ const getEvolutionData = async (evolution, currentId, pokemon) => {
             firstSpecieId = Number(chain[0]?.species?.url.match(/\d+/g)[1]);
             const secondSpecieName = chain[0]?.evolves_to[0]?.species?.name;
             secondSpecieId = Number(chain[0]?.evolves_to[0]?.species?.url.match(/\d+/g)[1]);
-
 
             newEvolution = [{
                 id: isNaN(firstSpecieId) ? firstSpecieId = 0 : firstSpecieId,
@@ -110,6 +112,26 @@ const getEvolutionData = async (evolution, currentId, pokemon) => {
     }
 }
 
+const getExplorerData = (list) => {
+    let array = list.results
+
+    let ids = array.map(id => {
+        return id.url.match(/\d+/g)[1]
+    })
+    let hi = [];
+
+    ids.map(id => {
+
+        fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+            .then(response => response.json())
+            .then(data => {
+
+                hi.push(data)
+                fillSectionExplorer(hi)
+            })
+    });
+}
+
 const fillSectionHome = (pokemon, specie) => {
     const homeElement = document.getElementById('home');
     const nameElement = document.getElementById('home-name');
@@ -149,7 +171,7 @@ const fillSectionEvolution = (evolution) => {
                 <div class="card-body">
                     <div class="card-data-box margin-bottom-1">
                         <p id="identifier-evolution" class="label">NUMBER</p>
-                        <p class="card-text font-blue font-weight-300"># ${data?.id}</p>
+                        <p class="card-text font-blue font-weight-300">#${data?.id}</p>
                     </div>
                     <div class="card-data-box">
                         <p class="label">NAME</p>
@@ -162,6 +184,20 @@ const fillSectionEvolution = (evolution) => {
             evolutionElement.appendChild(element)
         })
     }
+}
+
+const fillSectionExplorer = (list) => {
+    const explorerElement = document.getElementById('explorer');
+    explorerElement.innerHTML = list.map(data => `<div class="small-card">
+    <div class="small-card-img-box">
+      <img src="${data?.sprites?.other?.dream_world?.front_default}" alt="" />
+    </div>
+    <div class="small-card-body">
+      <p class="label font-gray">#${data?.id}</p>
+      <p class="card-text font-gray font-weight-300">${data?.name}</p>
+    </div>
+  </div>`
+    ).join('')
 }
 
 fetchData(randomPoke);
