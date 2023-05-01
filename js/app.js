@@ -26,11 +26,88 @@ const fetchData = async (id) => {
         const data = await pokeData.json();
         const specie = await pokeSpecie.json();
 
-        fillSectionHome(data, specie)
+        getEvolutionData(specie, id, data);
+
+        fillSectionHome(data, specie);
     }
     catch (error) {
         console.log(error);
     };
+}
+
+const getEvolutionData = async (evolution, currentId, pokemon) => {
+    let firstSpecieId = 0;
+    let secondSpecieId = 0;
+    let newEvolution = {};
+
+    await fetch(evolution.evolution_chain.url)
+        .then(response => response.json())
+        .then(data => {
+            const chain = data?.chain?.evolves_to;
+            const firstSpecieName = chain[0]?.species?.name || chain.species?.name;
+            firstSpecieId = Number(chain[0]?.species?.url.match(/\d+/g)[1]);
+            const secondSpecieName = chain[0]?.evolves_to[0]?.species?.name;
+            secondSpecieId = Number(chain[0]?.evolves_to[0]?.species?.url.match(/\d+/g)[1]);
+
+
+            newEvolution = [{
+                id: isNaN(firstSpecieId) ? firstSpecieId = 0 : firstSpecieId,
+                name: firstSpecieName
+            },
+            {
+                id: isNaN(secondSpecieId) ? secondSpecieId = 0 : secondSpecieId,
+                name: secondSpecieName,
+            }]
+
+            if (currentId != firstSpecieId && currentId != secondSpecieId) {
+                newEvolution = [
+                    {
+                        id: currentId,
+                        name: pokemon?.name,
+                        image: pokemon?.sprites?.other?.dream_world?.front_default,
+
+                    },
+                    {
+                        id: firstSpecieId,
+                        name: firstSpecieName,
+                        image: null
+                    },
+                    {
+                        id: secondSpecieId,
+                        name: secondSpecieName,
+                        image: null
+                    }
+                ]
+            }
+        })
+
+    if (firstSpecieId !== 0) {
+
+        await fetch(`https://pokeapi.co/api/v2/pokemon/${firstSpecieId}`)
+            .then(response => response.json())
+            .then(evolution => {
+                let pokemonEvolution = newEvolution.find(element =>
+                    element.id === firstSpecieId
+                )
+                pokemonEvolution.image = evolution?.sprites?.other?.dream_world?.front_default
+            });
+    }
+
+    if (secondSpecieId !== 0 && secondSpecieId !== NaN) {
+        await fetch(`https://pokeapi.co/api/v2/pokemon/${secondSpecieId}`)
+            .then(response => response.json())
+            .then(evolution => {
+                let pokemonEvolution = newEvolution.find(element =>
+                    element.id === secondSpecieId
+                )
+                pokemonEvolution.image = evolution?.sprites?.other?.dream_world?.front_default
+                pokemonEvolution.types = evolution?.types
+            });
+    }
+
+    if (newEvolution.length > 1) {
+        fillSectionEvolution(newEvolution);
+    }
 }
 
 const fillSectionHome = (pokemon, specie) => {
@@ -41,17 +118,50 @@ const fillSectionHome = (pokemon, specie) => {
     const identifierElement = document.getElementById('identifier');
 
     const image = pokemon?.sprites?.other?.dream_world?.front_default;
-    const type = pokemon?.types;
-    const color = specie?.color?.name;
-    const types = type.map(type => {
+    const types = pokemon?.types;
+    const type = types.map(type => {
         return type.type.name
     })
+    const color = specie?.color?.name;
 
     nameElement.innerHTML = pokemon?.name;
     imageElement.style.backgroundImage = `url(${image})`;
     homeElement.style.backgroundColor = pokemonColors[color];
-    typeElement.innerHTML = types.join(' | ');
+    typeElement.innerHTML = type.join(' | ');
     identifierElement.innerHTML = `#${pokemon?.id}`;
+}
+
+const fillSectionEvolution = (evolution) => {
+    const evolutionElement = document.getElementById('evolution');
+    const evolutionSectionElement = document.getElementById('evolution-section');
+
+    if (evolution.length === 0) {
+        evolutionSectionElement.style.display = 'none';
+    } else {
+        evolution.map((data) => {
+            let element = this.document.createElement('div');
+            element.className = "content-cards";
+            if (data.id !== 0) {
+                element.innerHTML = `<div class="large-card">
+                <div class="card-img-box">
+                    <img src="${data?.image}" alt="" />
+                </div>
+                <div class="card-body">
+                    <div class="card-data-box margin-bottom-1">
+                        <p id="identifier-evolution" class="label">NUMBER</p>
+                        <p class="card-text font-blue font-weight-300"># ${data?.id}</p>
+                    </div>
+                    <div class="card-data-box">
+                        <p class="label">NAME</p>
+                        <p class="card-text font-dark-blue font-weight-300">${data?.name}</p>
+                    </div>
+                </div>
+            </div>`
+            }
+
+            evolutionElement.appendChild(element)
+        })
+    }
 }
 
 fetchData(randomPoke);
