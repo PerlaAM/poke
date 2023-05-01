@@ -37,11 +37,11 @@ const fetchData = async (id) => {
         console.log(error);
     };
 }
+let newEvolution = {};
 
 const getEvolutionData = async (evolution, currentId, pokemon) => {
     let firstSpecieId = 0;
     let secondSpecieId = 0;
-    let newEvolution = {};
 
     await fetch(evolution.evolution_chain.url)
         .then(response => response.json())
@@ -154,7 +154,6 @@ const fillSectionHome = (pokemon, specie) => {
 }
 
 const fillSectionEvolution = (evolution) => {
-    const evolutionElement = document.getElementById('evolution');
     const evolutionSectionElement = document.getElementById('evolution-section');
 
     if (evolution.length === 0) {
@@ -163,8 +162,9 @@ const fillSectionEvolution = (evolution) => {
         evolution.map((data) => {
             let element = this.document.createElement('div');
             element.className = "content-cards";
+
             if (data.id !== 0) {
-                element.innerHTML = `<div class="large-card">
+                element.innerHTML = `<div class="large-card" onclick="fetchReset(${data?.id})">
                 <div class="card-img-box">
                     <img src="${data?.image}" alt="" />
                 </div>
@@ -180,7 +180,7 @@ const fillSectionEvolution = (evolution) => {
                 </div>
             </div>`
             }
-
+            const evolutionElement = document.getElementById('evolution');
             evolutionElement.appendChild(element)
         })
     }
@@ -188,9 +188,9 @@ const fillSectionEvolution = (evolution) => {
 
 const fillSectionExplorer = (list) => {
     const explorerElement = document.getElementById('explorer');
-    explorerElement.innerHTML = list.map(data => `<div class="small-card">
+    explorerElement.innerHTML = list.map(data => `<div class="small-card" onclick="fetchReset(${data?.id})">
     <div class="small-card-img-box">
-      <img src="${data?.sprites?.other?.dream_world?.front_default}" alt="" />
+      <img src="${data?.sprites?.other?.dream_world?.front_default}" alt="${data?.name}"/>
     </div>
     <div class="small-card-body">
       <p class="label font-gray">#${data?.id}</p>
@@ -198,6 +198,12 @@ const fillSectionExplorer = (list) => {
     </div>
   </div>`
     ).join('')
+}
+
+const fetchReset = (id) => {
+    document.getElementById('evolution').innerHTML = "";
+    fetchData(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 fetchData(randomPoke);
