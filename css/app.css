@@ -50,6 +50,10 @@ body {
   margin-bottom: 1rem;
 }
 
+.flex {
+  display: flex;
+}
+
 .container {
   box-sizing: border-box;
   padding: 3rem 4rem;
@@ -149,6 +153,35 @@ body {
 
 .card-text {
   font-size: 1.4rem;
+}
+
+.content-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.small-card {
+  background-color: #002856;
+  border-radius: 2rem;
+  padding: 1.5rem;
+  display: flex;
+  width: 20rem;
+  margin: 0 0.5rem 1rem 0;
+}
+
+.small-card-img-box {
+  margin-right: 1rem;
+}
+
+.small-card-img-box img {
+  width: 5rem;
+}
+
+.small-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 @media screen and (max-width: 639px) {
