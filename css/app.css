@@ -62,10 +62,9 @@ body {
 .home {
   padding-left: 4rem;
   width: 100%;
-  /* TODO: dynamic background color */
-  background-color: blue;
   display: flex;
   box-sizing: border-box;
+  align-items: center;
 }
 
 .text-box {
@@ -77,14 +76,13 @@ body {
 }
 
 .img-box {
-  background: url(../assets/147.svg);
   background-position: center;
   background-repeat: no-repeat;
   width: 40%;
   background-size: contain;
   right: -180px;
   position: absolute;
-  height: 100%;
+  height: 27rem;
 }
 
 .name {
@@ -92,18 +90,26 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  line-height: 1;
   font-weight: 600;
+  text-transform: capitalize;
+}
+
+.type-label {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1;
 }
 
 .type {
   font-size: 2.7rem;
   font-weight: 300;
+  text-transform: capitalize;
+  line-height: 1;
 }
 
 .identifier {
   font-size: 3.3rem;
-  color: #f7f7f7;
+  color: #2d2926;
   margin: 0;
   position: absolute;
   bottom: 0;
@@ -188,10 +194,16 @@ body {
   .home {
     padding: 0 2rem;
     flex-direction: column;
+    align-items: inherit;
+  }
+
+  .img-box {
+    margin-bottom: 1.5rem;
   }
 
   .text-box {
     width: 100%;
+    text-align: center;
   }
 
   .name {
