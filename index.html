@@ -17,9 +17,16 @@
   <body>
     <div class="topnav">
       <div class="search-container">
-        <input type="search" id="search-input" placeholder="Search...">
+        <div>
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Search..."
+            onkeypress="doKeySearch(event)"
+          />
           <button onclick="doSearch()">Search</button>
-        </form>
+        </div>
+        <p id="error" class="alert">The pokemon was not found</p>
       </div>
     </div>
 

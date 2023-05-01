@@ -34,6 +34,9 @@ const fetchData = async (id) => {
 
     }
     catch (error) {
+        const errorElement = document.getElementById("error");
+        errorElement.style.display = "block";
+
         console.log(error);
     };
 }
@@ -60,8 +63,7 @@ const getEvolutionData = async (evolution, currentId, pokemon) => {
                 id: isNaN(secondSpecieId) ? secondSpecieId = 0 : secondSpecieId,
                 name: secondSpecieName,
             }]
-
-            if (currentId != firstSpecieId && currentId != secondSpecieId && pokemon.name != firstSpecieName) {
+            if (currentId != firstSpecieId && currentId != secondSpecieId && pokemon.name != firstSpecieName && pokemon.name != secondSpecieName) {
                 newEvolution = [
                     {
                         id: currentId,
@@ -203,10 +205,27 @@ const fetchReset = (id) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+const doKeySearch = (e) => {
+    const searchInput = document.getElementById("search-input").value;
+    const errorElement = document.getElementById("error");
+    errorElement.style.display = "none";
+
+    if (searchInput.length !== 0 && e.keyCode === 13) {
+        document.getElementById('evolution').innerHTML = "";
+        fetchData(searchInput.toLowerCase());
+    }
+}
+
 const doSearch = () => {
     const searchInput = document.getElementById("search-input").value;
-    document.getElementById('evolution').innerHTML = "";
-    fetchData(searchInput);
+    const errorElement = document.getElementById("error");
+    errorElement.style.display = "none";
+
+    if (searchInput.length !== 0) {
+        document.getElementById('evolution').innerHTML = "";
+        fetchData(searchInput.toLowerCase());
+    }
+
 }
 
 fetchData(randomPoke);
