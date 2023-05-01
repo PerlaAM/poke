@@ -114,20 +114,17 @@ const getEvolutionData = async (evolution, currentId, pokemon) => {
 
 const getExplorerData = (list) => {
     let array = list.results
-
     let ids = array.map(id => {
         return id.url.match(/\d+/g)[1]
     })
-    let hi = [];
+    let emptyArray = [];
 
     ids.map(id => {
-
         fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
             .then(response => response.json())
             .then(data => {
-
-                hi.push(data)
-                fillSectionExplorer(hi)
+                emptyArray.push(data)
+                fillSectionExplorer(emptyArray)
             })
     });
 }
@@ -204,6 +201,11 @@ const fetchReset = (id) => {
     document.getElementById('evolution').innerHTML = "";
     fetchData(id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const doSearch = () => {
+    const searchInput = document.getElementById("search-input").value;
+    fetchData(searchInput);
 }
 
 fetchData(randomPoke);
