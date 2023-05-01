@@ -76,6 +76,7 @@ button {
   width: 8rem;
   border-radius: 13px;
   color: white;
+  cursor: pointer;
 }
 
 button:hover {
@@ -142,6 +143,7 @@ button:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  cursor: pointer;
 }
 
 .large-card {
@@ -202,6 +204,7 @@ button:hover {
   display: flex;
   width: 20rem;
   margin: 0 0.5rem 1rem 0;
+  cursor: pointer;
 }
 
 .small-card-img-box {
@@ -255,6 +258,11 @@ button:hover {
     width: 100%;
     margin: 1.25rem 0;
   }
+
+  button {
+    margin: 0 auto;
+    margin-top: 1rem;
+  }
 }
 
 @media screen and (min-width: 640px) and (max-width: 1023px) {
@@ -297,5 +305,10 @@ button:hover {
   }
   .card-img-box img {
     height: 5rem;
+  }
+
+  button {
+    margin: 0 auto;
+    margin-top: 1rem;
   }
 }
